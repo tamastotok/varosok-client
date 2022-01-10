@@ -1,25 +1,30 @@
 import { useEffect } from 'react';
 import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Login from './views/Login';
 import Profile from './views/Profile';
 import Cities from './views/Cities';
+import { setUser } from './store/user/user.action';
 
 export default function App() {
   const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const _id = localStorage.getItem('_id');
+  const name = localStorage.getItem('name');
+  const email = localStorage.getItem('email');
+  const user = { _id, name, email };
 
   useEffect(() => {
-    if (localStorage.getItem('_id') && !location.pathname.includes('/cities')) {
-      history.push(`/profile/${localStorage.getItem('_id')}`);
+    if (_id && !location.pathname.includes('/cities')) {
+      history.push(`/profile/${_id}`);
+      dispatch(setUser(user));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localStorage]);
 
   useEffect(() => {
-    if (
-      location.pathname.includes('/profile') &&
-      !localStorage.getItem('_id')
-    ) {
+    if (location.pathname.includes('/profile') && !_id) {
       history.push('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

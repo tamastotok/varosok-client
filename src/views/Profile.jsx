@@ -1,11 +1,13 @@
-import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deleteUser } from '../store/user/user.action';
 import NavButton from '../components/NavButton';
 import Button from 'react-bootstrap/Button';
 import { logout } from '../services/logout';
-import { useHistory } from 'react-router-dom';
 
 export default function Profile() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const _id = localStorage.getItem('_id');
   const name = localStorage.getItem('name');
   const email = localStorage.getItem('email');
@@ -15,7 +17,12 @@ export default function Profile() {
 
   const handleLogout = () => {
     logout(_id).then((res) => {
-      if (res) history.push('/');
+      if (res) {
+        localStorage.clear();
+        localStorage.setItem('last-online', Date.now());
+        dispatch(deleteUser());
+        history.push('/');
+      }
     });
   };
 

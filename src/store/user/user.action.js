@@ -4,3 +4,9 @@ export const setUser = (string) => {
     payload: string,
   };
 };
+
+export const deleteUser = () => {
+  return {
+    type: 'DELETE_USER',
+  };
+};

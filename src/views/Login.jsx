@@ -1,5 +1,7 @@
 import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/user/user.action';
 import NavButton from '../components/NavButton';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +14,7 @@ import mail_black_24dp from '../assets/mail_black_24dp.svg';
 
 export default function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const visibleIconRef = useRef(null);
@@ -34,7 +37,11 @@ export default function Login() {
 
     login(emailRef.current.value, passwordRef.current.value).then((res) => {
       if (res) {
-        history.push(`/profile/${localStorage.getItem('_id')}`);
+        localStorage.setItem('_id', res._id);
+        localStorage.setItem('name', res.name);
+        localStorage.setItem('email', res.email);
+        dispatch(setUser(res));
+        history.push(`/profile/${res._id}`);
       }
     });
   };

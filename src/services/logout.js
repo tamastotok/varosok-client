@@ -7,12 +7,7 @@ export const logout = async (_id) => {
       _id,
     });
 
-    if (data) {
-      localStorage.clear();
-      localStorage.setItem('last-online', Date.now());
-    }
-
-    return true;
+    return data;
   } catch (error) {
     console.error(error);
     return false;
